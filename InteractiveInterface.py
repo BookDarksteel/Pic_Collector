@@ -1,5 +1,4 @@
 ﻿# Pic_Collector
-# v1.0.0r
 # InteractiveInterface.py
 
 from enum import Enum

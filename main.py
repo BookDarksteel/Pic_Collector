@@ -1,5 +1,4 @@
 ﻿# Pic_Collector
-# v1.0.0r
 # mian.py
 
 import atexit
@@ -465,10 +464,10 @@ def print_about_info():
     无返回值。
     """
     print("Pic_Collector")
-    print("v1.0.0")
+    print("v1.0.1r")
     print("Pic_Collector是一个用于管理图片及其信息的应用程序。")
     print()
-    print("此版本Pic_Collector开发完成日期：2025年7月1日")
+    print("此版本Pic_Collector开发完成日期：2025年7月4日")
     print("开发者：BookDarksteel")
 
 def print_import_pic_info_norm():
@@ -514,8 +513,12 @@ def print_import_pic_info_norm():
 
 def print_update_log():
     print("-更新日志-")
-    print("v1.0.0")
-    print("\tPic_Collector的第一个版本。")
+    print("v1.0.1r")
+    print("\t修正了程序开始运行时版本号显示错误的错误；")
+    print("\t提供了.gitignore文件；")
+    print("\t修正了readme.md中的一些错误。")
+    print("v1.0.0r")
+    print("\tPic_Collector的第一个开源版本。")
     print("---")
 
 def show_pic_info(pic_info):
@@ -609,8 +612,8 @@ def show_search_results(results):
 
 
 if __name__ == "__main__":
-    print("-----\nPic_Collector\n-----\n")
-    print("v 0.0.0")
+    print("-----\nPic_Collector\n-----")
+    print("v 1.0.1r")
     print("欢迎使用")
     print("按任意键继续")
     msvcrt.getch()

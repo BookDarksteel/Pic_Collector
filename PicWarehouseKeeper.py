@@ -1,5 +1,4 @@
 ﻿# Pic_Collector
-# v1.0.0r
 # WarehouseKeeper.py
 
 from copy import deepcopy

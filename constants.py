@@ -1,5 +1,4 @@
 ﻿# Pic_Collector
-# v1.0.0r
 # constants.py
 
 

@@ -1,0 +1,13 @@
+﻿# Pic_Collector
+# .gitignore
+
+.vs/
+
+__pycache__/
+pics/
+results_pic_copy/
+
+*.lock
+*.pyproj
+*.sln
+*.txt
