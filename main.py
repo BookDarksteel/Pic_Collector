@@ -464,11 +464,12 @@ def print_about_info():
     无返回值。
     """
     print("Pic_Collector")
-    print("v 1.1.0r")
+    print("v 1.1.1r")
     print("Pic_Collector是一个用于管理图片及其信息的应用程序。")
     print()
-    print("此版本Pic_Collector开发完成日期：2025年7月6日")
+    print("此版本Pic_Collector开发完成日期：2025年7月8日")
     print("开发者：BookDarksteel")
+
 
 def print_import_pic_info_norm():
     """
@@ -513,6 +514,8 @@ def print_import_pic_info_norm():
 
 def print_update_log():
     print("-更新日志-")
+    print("v1.1.1r")
+    print("\t调整部分代码格式。")
     print("v1.1.0r")
     print("\t增加了按标签搜索的功能；")
     print("\t修正了关于按普通字段和文件名搜索功能的一些错误。")
@@ -616,7 +619,7 @@ def show_search_results(results):
 
 if __name__ == "__main__":
     print("-----\nPic_Collector\n-----")
-    print("v 1.1.0r")
+    print("v 1.1.1r")
     print("欢迎使用")
     print("按任意键继续")
     msvcrt.getch()
@@ -974,8 +977,12 @@ if __name__ == "__main__":
 
             elif user_input[0] == "A" or user_input[0] == "a":
                 print("-按普通字段和文件名搜索-")
-                print("您需要针对图片库的每个图片信息普通字段和文件名依次输入搜索词，\n然后在图片库中搜索满足您输入的所有要求的图片。")
-                print("如果您希望对某个字段不做限制，请在需要输入该字段的搜索词时不输入任何内容并直接按下“Enter”键")
+                print(
+                    "您需要针对图片库的每个图片信息普通字段和文件名依次输入搜索词，\n然后在图片库中搜索满足您输入的所有要求的图片。"
+                )
+                print(
+                    "如果您希望对某个字段不做限制，请在需要输入该字段的搜索词时不输入任何内容并直接按下“Enter”键"
+                )
                 print("不支持模糊搜索，但搜索时不区分英文字母的大小写。")
                 common_field_file_name_search_terms_dict = {}
                 user_defined_ordinary_fields = (
@@ -983,11 +990,15 @@ if __name__ == "__main__":
                 )
                 field_search_term = input("文件名：")
                 if field_search_term != "":
-                    common_field_file_name_search_terms_dict["文件名"] = field_search_term
+                    common_field_file_name_search_terms_dict["文件名"] = (
+                        field_search_term
+                    )
                 for field in user_defined_ordinary_fields:
                     field_search_term = input(field + "：")
                     if field_search_term != "":
-                        common_field_file_name_search_terms_dict[field] = field_search_term
+                        common_field_file_name_search_terms_dict[field] = (
+                            field_search_term
+                        )
 
                 search_results = warehouse_keeper.common_field_file_name_search(
                     common_field_file_name_search_terms_dict
@@ -1043,17 +1054,17 @@ if __name__ == "__main__":
 
             elif user_input[0] == "B" or user_input[0] == "b":
                 print("-按标签搜索（和）-")
-                print("您需要输入一组您希望搜索的标签，此功能会搜索同时拥有您输入的所有标签的图片。")
+                print(
+                    "您需要输入一组您希望搜索的标签，此功能会搜索同时拥有您输入的所有标签的图片。"
+                )
                 print("不支持模糊搜索，但搜索时不区分英文字母的大小写。")
-                print("输入多个标签时标签之间使用“"+INLINE_INFO_SEPARATOR+"”分隔。")
-                user_input=input("请输入您希望搜索的标签集：")
+                print("输入多个标签时标签之间使用“" + INLINE_INFO_SEPARATOR + "”分隔。")
+                user_input = input("请输入您希望搜索的标签集：")
                 print()
                 if user_input == "":
                     print("您没有输入任何内容，无法进行按标签搜索。")
                 else:
-                    raw_search_pic_tags = (user_input).split(
-                        INLINE_INFO_SEPARATOR
-                    )
+                    raw_search_pic_tags = (user_input).split(INLINE_INFO_SEPARATOR)
                     num_raw_search_pic_tags = len(raw_search_pic_tags)
                     search_pic_tags = sorted(
                         set(raw_search_pic_tags), key=raw_search_pic_tags.index
@@ -1067,7 +1078,7 @@ if __name__ == "__main__":
                     if "" in search_pic_tags:
                         search_pic_tags.remove("")
 
-                    search_results=warehouse_keeper.tag_search(True,search_pic_tags)
+                    search_results = warehouse_keeper.tag_search(True, search_pic_tags)
                     result_ids = [result[0] for result in search_results]
                     show_search_results(search_results)
 
@@ -1090,7 +1101,9 @@ if __name__ == "__main__":
                                 concerned_pic_id = int(user_input)
                                 return_main_menu = False
                                 while True:
-                                    if warehouse_keeper.check_pic_exist(concerned_pic_id):
+                                    if warehouse_keeper.check_pic_exist(
+                                        concerned_pic_id
+                                    ):
                                         if concerned_pic_id not in result_ids:
                                             print(
                                                 COLOR_YELLOW
@@ -1105,7 +1118,9 @@ if __name__ == "__main__":
                                         else:
                                             concerned_pic_id = next_id
                                     else:
-                                        print("图片仓库中没有您输入的图片编号对应的图片。")
+                                        print(
+                                            "图片仓库中没有您输入的图片编号对应的图片。"
+                                        )
                                         break
                                     if return_main_menu:
                                         break
@@ -1119,17 +1134,17 @@ if __name__ == "__main__":
 
             elif user_input[0] == "C" or user_input[0] == "c":
                 print("-按标签搜索（或）-")
-                print("您需要输入一组您希望搜索的标签，此功能会搜索拥有您输入的标签中任意至少一个标签的图片。")
+                print(
+                    "您需要输入一组您希望搜索的标签，此功能会搜索拥有您输入的标签中任意至少一个标签的图片。"
+                )
                 print("不支持模糊搜索，但搜索时不区分英文字母的大小写。")
-                print("输入多个标签时标签之间使用“"+INLINE_INFO_SEPARATOR+"”分隔。")
-                user_input=input("请输入您希望搜索的标签集：")
+                print("输入多个标签时标签之间使用“" + INLINE_INFO_SEPARATOR + "”分隔。")
+                user_input = input("请输入您希望搜索的标签集：")
                 print()
                 if user_input == "":
                     print("您没有输入任何内容，无法进行按标签搜索。")
                 else:
-                    raw_search_pic_tags = (user_input).split(
-                        INLINE_INFO_SEPARATOR
-                    )
+                    raw_search_pic_tags = (user_input).split(INLINE_INFO_SEPARATOR)
                     num_raw_search_pic_tags = len(raw_search_pic_tags)
                     search_pic_tags = sorted(
                         set(raw_search_pic_tags), key=raw_search_pic_tags.index
@@ -1143,7 +1158,7 @@ if __name__ == "__main__":
                     if "" in search_pic_tags:
                         search_pic_tags.remove("")
 
-                    search_results=warehouse_keeper.tag_search(False,search_pic_tags)
+                    search_results = warehouse_keeper.tag_search(False, search_pic_tags)
                     result_ids = [result[0] for result in search_results]
                     show_search_results(search_results)
 
@@ -1166,7 +1181,9 @@ if __name__ == "__main__":
                                 concerned_pic_id = int(user_input)
                                 return_main_menu = False
                                 while True:
-                                    if warehouse_keeper.check_pic_exist(concerned_pic_id):
+                                    if warehouse_keeper.check_pic_exist(
+                                        concerned_pic_id
+                                    ):
                                         if concerned_pic_id not in result_ids:
                                             print(
                                                 COLOR_YELLOW
@@ -1181,7 +1198,9 @@ if __name__ == "__main__":
                                         else:
                                             concerned_pic_id = next_id
                                     else:
-                                        print("图片仓库中没有您输入的图片编号对应的图片。")
+                                        print(
+                                            "图片仓库中没有您输入的图片编号对应的图片。"
+                                        )
                                         break
                                     if return_main_menu:
                                         break

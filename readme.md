@@ -1,12 +1,12 @@
 ﻿# Pic_Collector
 
-**v 1.1.0r | Python源代码版 | Github开源版**
+**v 1.1.1r | Python源代码版 | Github开源版**
 
 Pic_Collector是一个用于管理图片及其信息的应用程序。
 
 Pic_Collector能够管理您的图片以及与图片相关的信息，它提供对图片编号、管理图片信息、简单的搜索等实用功能。能够通过标签管理图片是Pic_Collector的一个值得一提的功能。
 
-此版本Pic_Collector开发完成日期：2025年7月6日  
+此版本Pic_Collector开发完成日期：2025年7月8日  
 开发者：BookDarksteel
 
 ## 如何开始使用Pic_Collector
@@ -47,6 +47,8 @@ Pic_Collector使用了如下Python库，这些库都是比较常见的，其中�
 强烈建议在使用Pic_Collector时将其会处理的信息进行备份以防程序错误或操作意外带来的损失。
 
 ## 更新日志
+- v 1.1.1r  
+调整了部分代码的格式。
 - v 1.1.0r  
 增加了按标签搜索的功能；  
 修正了关于按普通字段和文件名搜索功能的一些错误。
@@ -61,13 +63,13 @@ Pic_Collector的第一个开源版本。
 
 # Pic_Collector
 
-**v 1.1.0r | Python source code edition | Github open source edition**
+**v 1.1.1r | Python source code edition | Github open source edition**
 
 Pic_Collector is an application for managing pictures and their information.
 
 Pic_Collector is able to manage your pictures and the information related to them, it provides useful functions such as numbering pictures, managing picture information, simple searching and so on. The ability to manage images by tags is a noteworthy feature of Pic_Collector.
 
-Development completion date for this version of Pic_Collector: July 6, 2025  
+Development completion date for this version of Pic_Collector: July 8, 2025  
 Developer: BookDarksteel
 
 ## How to get started with Pic_Collector
@@ -108,6 +110,8 @@ It should be pointed out that Pic_Collector is an application developed by BookD
 It is strongly recommended to make a backup of the information that Pic_Collector will process when using it in order to prevent losses caused by program errors or operational accidents.
 
 ## Update log
+- v 1.1.1r  
+Adjusted the formatting of some codes.
 - v 1.1.0r  
 Added the function of searching by tags;  
 Fixed some bugs about the function of searching by common fields and filenames.

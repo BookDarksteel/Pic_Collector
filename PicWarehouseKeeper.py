@@ -266,7 +266,7 @@ class PicWarehouseKeeper(object):
         for pic_id in self._pic_info_dict.keys():
             matching = True
             for field in self._pic_info_dict[pic_id]:
-                if field in self._user_defined_comment_fields or field=="标签":
+                if field in self._user_defined_comment_fields or field == "标签":
                     continue
                 else:
                     if field in search_term_dict.keys():
@@ -280,7 +280,7 @@ class PicWarehouseKeeper(object):
                     [
                         pic_id,
                         deepcopy(self._pic_info_dict[pic_id]),
-                        ["文件名"]+self.get_user_defined_ordinary_fields()
+                        ["文件名"] + self.get_user_defined_ordinary_fields(),
                     ]
                 )
         self._pwk_print("搜索完成")
@@ -611,7 +611,7 @@ class PicWarehouseKeeper(object):
             "导入图片时显示细节设置项设置为" + str(self._import_show_details) + "。"
         )
 
-    def tag_search(self,and_or_flag,search_tags):
+    def tag_search(self, and_or_flag, search_tags):
         """
         按标签搜索
         参数and_or_flag：若为True则搜索图片仓库中拥有search_tags中的所有标签的图片；若为False则搜索图片仓库中拥有search_tags中的任意至少一个标签的图片；
@@ -620,32 +620,35 @@ class PicWarehouseKeeper(object):
         """
         self._pwk_print("开始搜索...")
         for tag_i in range(len(search_tags)):
-            search_tags[tag_i]=search_tags[tag_i].lower()
+            search_tags[tag_i] = search_tags[tag_i].lower()
         results = []
 
         if and_or_flag:
             for pic_id in self._pic_info_dict.keys():
                 matching = True
-                pic_tags_lower=[]
+                pic_tags_lower = []
                 for tag in self._pic_info_dict[pic_id]["标签"]:
                     pic_tags_lower.append(tag.lower())
                 for tag in search_tags:
                     if tag not in pic_tags_lower:
-                        matching=False
+                        matching = False
                         break
                 if matching:
-                    results.append([pic_id, deepcopy(self._pic_info_dict[pic_id]), ["标签"]])
+                    results.append(
+                        [pic_id, deepcopy(self._pic_info_dict[pic_id]), ["标签"]]
+                    )
 
         else:
             for pic_id in self._pic_info_dict.keys():
-                pic_tags_lower=[]
+                pic_tags_lower = []
                 for tag in self._pic_info_dict[pic_id]["标签"]:
                     pic_tags_lower.append(tag.lower())
                 for tag in search_tags:
                     if tag in pic_tags_lower:
-                        results.append([pic_id, deepcopy(self._pic_info_dict[pic_id]), ["标签"]])
+                        results.append(
+                            [pic_id, deepcopy(self._pic_info_dict[pic_id]), ["标签"]]
+                        )
                         break
 
         self._pwk_print("搜索完成")
         return results
-
