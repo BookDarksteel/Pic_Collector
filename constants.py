@@ -1,6 +1,9 @@
 ﻿# Pic_Collector
 # constants.py
 
+VERSION_STR = "1.2.0r"
+VERSION_COMPLETION_DATE_STR = "2025年7月26日"
+DEVELOPER = "BookDarksteel"
 
 PROGRAM_SINGLE_INSTANCE_LOCK_FILE_PATH = "psil.lock"
 
@@ -17,6 +20,7 @@ PIC_INFO_FILE_HEAD = "图片信息文件\n\
 
 PIC_FOLDER_PATH = "pics"
 DEFULT_RESULTS_FOLDER_PATH = "results_pic_copy"
+EXPANSION_FUNCTION_MODULE_FOLDER_PATH = "expansion_function_modules"
 
 INLINE_INFO_SEPARATOR = "、"
 

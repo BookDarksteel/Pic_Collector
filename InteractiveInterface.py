@@ -11,5 +11,6 @@ class InteractiveInterface(Enum):
     import_pictures = 4
     view_picture_modify_picture_info = 5
     modify_warehouse_info = 6
-    settings = 7
-    about = 8
+    expansion_function = 7
+    settings = 8
+    about = 9

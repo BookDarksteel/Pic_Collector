@@ -4,6 +4,8 @@
 .vs/
 
 __pycache__/
+env/
+expansion_function_modules/
 pics/
 results_pic_copy/
 

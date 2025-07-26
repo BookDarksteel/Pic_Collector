@@ -464,12 +464,11 @@ def print_about_info():
     无返回值。
     """
     print("Pic_Collector")
-    print("v 1.1.1r")
+    print("v " + VERSION_STR)
     print("Pic_Collector是一个用于管理图片及其信息的应用程序。")
     print()
-    print("此版本Pic_Collector开发完成日期：2025年7月8日")
-    print("开发者：BookDarksteel")
-
+    print("此版本Pic_Collector开发完成日期：" + VERSION_COMPLETION_DATE_STR)
+    print("开发者：" + DEVELOPER)
 
 def print_import_pic_info_norm():
     """
@@ -510,10 +509,16 @@ def print_import_pic_info_norm():
     )
     print("\t而且描述每张图片的文本段内不允许出现无意义的空行。")
     print("每个描述一张图片的文本段之间用一个空行分隔。")
+    print("文件内容的最后需要有至少1个空行。")
     print("---")
 
 def print_update_log():
     print("-更新日志-")
+    print("v1.2.0r")
+    print("\t支持通过拓展功能模块扩展功能；")
+    print("\t提供了示例拓展功能模块；")
+    print("\t修正了导入图片时不输入标签会导致图片信息异常的错误和图片没有标签时导出的图片信息存在异常的错误；")
+    print("\t优化了少许提示信息。")
     print("v1.1.1r")
     print("\t调整部分代码格式。")
     print("v1.1.0r")
@@ -619,7 +624,7 @@ def show_search_results(results):
 
 if __name__ == "__main__":
     print("-----\nPic_Collector\n-----")
-    print("v 1.1.1r")
+    print("v " + VERSION_STR)
     print("欢迎使用")
     print("按任意键继续")
     msvcrt.getch()
@@ -820,7 +825,7 @@ if __name__ == "__main__":
                     with open(PIC_INFO_FILE_PATH, "w", encoding="utf-8") as f:
                         f.write(PIC_INFO_FILE_HEAD)
                         f.write("\n\n")
-                    os.makedirs(PIC_FOLDER_PATH)
+                    os.mkdir(PIC_FOLDER_PATH)
                     print(STYLE_LOWLIGHT + "图片仓库创建成功" + STYLE_DEFULT)
                     break
                 elif user_input[0] == "N" or user_input[0] == "n":
@@ -849,6 +854,7 @@ if __name__ == "__main__":
             print("C.导入图片")
             print("D.查看图片/修改图片信息")
             print("E.修改仓库信息")
+            print("F.拓展功能")
             print("S.设置")
             print("T.关于Pic_Collector")
             print("Q.退出")
@@ -868,6 +874,8 @@ if __name__ == "__main__":
                 current_ii = InteractiveInterface.view_picture_modify_picture_info
             elif user_input[0] == "E" or user_input[0] == "e":
                 current_ii = InteractiveInterface.modify_warehouse_info
+            elif user_input[0] == "F" or user_input[0] == "f":
+                current_ii = InteractiveInterface.expansion_function
             elif user_input[0] == "S" or user_input[0] == "s":
                 current_ii = InteractiveInterface.settings
             elif user_input[0] == "T" or user_input[0] == "t":
@@ -1244,9 +1252,7 @@ if __name__ == "__main__":
             elif user_input[0] == "A" or user_input[0] == "a":
                 print("---导入单张图片---")
                 print("导入单张图片需要您输入要导入图片的路径，并输入该图片的信息。")
-                print(
-                    "注意：您需要输入包含图片文件后缀名的路径；请使用“/”作为文件路径分隔符。"
-                )
+                print("注意：您需要输入包含图片文件后缀名的路径。")
 
                 user_input = input("请输入要导入的图片的路径：")
                 print()
@@ -1353,7 +1359,6 @@ if __name__ == "__main__":
                 print(
                     "导入多张图片需要您将要导入的图片集合存入一个文件夹并输入该文件夹的路径，\n准备按照规范书写的保存有导入的图片的信息的文本文件并输入该文本文件的路径。"
                 )
-                print("注意：输入路径时请使用“/”作为文件路径分隔符。")
                 user_input = input("请输入要导入的图片所在的文件夹路径：")
                 print()
                 if os.path.exists(user_input) and os.path.isdir(user_input):
@@ -1438,24 +1443,31 @@ if __name__ == "__main__":
                                         if field not in import_pic_info.keys():
                                             import_pic_info[field] = ""
 
-                                    raw_import_pic_tags = pic_info_line_info[1].split(
-                                        INLINE_INFO_SEPARATOR
-                                    )
-                                    num_raw_import_pic_tags = len(raw_import_pic_tags)
-                                    import_pic_tags = sorted(
-                                        set(raw_import_pic_tags),
-                                        key=raw_import_pic_tags.index,
-                                    )
-                                    if len(import_pic_tags) != num_raw_import_pic_tags:
-                                        print(
-                                            COLOR_YELLOW
-                                            + "【提示】指定的图片信息中代号为 "
-                                            + raw_id_str
-                                            + " 的图片存在标签重复，重复的标签将仅保留一个。"
-                                            + STYLE_DEFULT
+                                    import_pic_tags = []
+                                    if pic_info_line_info[1] != "":
+                                        raw_import_pic_tags = pic_info_line_info[
+                                            1
+                                        ].split(INLINE_INFO_SEPARATOR)
+                                        num_raw_import_pic_tags = len(
+                                            raw_import_pic_tags
                                         )
-                                    if "" in import_pic_tags:
-                                        import_pic_tags.remove("")
+                                        import_pic_tags = sorted(
+                                            set(raw_import_pic_tags),
+                                            key=raw_import_pic_tags.index,
+                                        )
+                                        if (
+                                            len(import_pic_tags)
+                                            != num_raw_import_pic_tags
+                                        ):
+                                            print(
+                                                COLOR_YELLOW
+                                                + "【提示】指定的图片信息中代号为 "
+                                                + raw_id_str
+                                                + " 的图片存在标签重复，重复的标签将仅保留一个。"
+                                                + STYLE_DEFULT
+                                            )
+                                        if "" in import_pic_tags:
+                                            import_pic_tags.remove("")
                                     import_pic_info["标签"] = import_pic_tags
 
                                     user_defined_comment_fields = (
@@ -2189,6 +2201,306 @@ if __name__ == "__main__":
 
                 else:
                     print("本程序未能理解您的输入，请您重新输入。")
+
+        elif current_ii == InteractiveInterface.expansion_function:
+            print("---拓展功能---")
+            if not os.path.exists(EXPANSION_FUNCTION_MODULE_FOLDER_PATH):
+                print("欢迎使用拓展功能")
+                print(
+                    "若您选择开启拓展功能，Pic_Collector将会在其工作文件夹下建立存储扩展功能模块的文件夹（"
+                    + EXPANSION_FUNCTION_MODULE_FOLDER_PATH
+                    + "），之后您只需将您拥有的与当前版本的Pic_Collector兼容的拓展功能模块文件夹存入存储扩展功能模块的文件夹（"
+                    + EXPANSION_FUNCTION_MODULE_FOLDER_PATH
+                    + "），就可以在Pic_Collector使用对应扩展功能模块提供的拓展功能了。"
+                )
+                while True:
+                    print("A.开启拓展功能")
+                    print("B.不开启拓展功能并返回主菜单")
+                    user_input = input("请输入：")
+                    print()
+
+                    if user_input == "":
+                        print("您没有输入任何内容，请您重新输入。")
+                    elif user_input[0] == "A" or user_input[0] == "a":
+                        os.mkdir(EXPANSION_FUNCTION_MODULE_FOLDER_PATH)
+                        print(STYLE_LOWLIGHT + "已开启拓展功能" + STYLE_DEFULT)
+                        print(
+                            "您现在可以将您拥有的与当前版本的Pic_Collector兼容的拓展功能模块文件夹存入存储扩展功能模块的文件夹（"
+                            + EXPANSION_FUNCTION_MODULE_FOLDER_PATH
+                            + "）了。"
+                        )
+                        print("此Pic_Collector版本：" + VERSION_STR)
+                        return_main_menu = True
+                        while True:
+                            print("A.已存入拓展功能模块文件，进入扩展功能模块选单")
+                            print("B.返回主菜单")
+                            user_input = input("请输入：")
+                            print()
+                            if user_input == "":
+                                print("您没有输入任何内容，请您重新输入。")
+                            elif user_input[0] == "A" or user_input[0] == "a":
+                                return_main_menu = False
+                                break
+                            elif user_input[0] == "B" or user_input[0] == "b":
+                                break
+                            else:
+                                print("本程序未能理解您的输入，请您重新输入。")
+                        if return_main_menu:
+                            current_ii = InteractiveInterface.main_menu
+                            break
+                        else:
+                            current_ii = InteractiveInterface.expansion_function
+                            interface_switching = False
+                            break
+                    elif user_input[0] == "B" or user_input[0] == "b":
+                        current_ii = InteractiveInterface.main_menu
+                        break
+
+            else:
+                expansion_function_modules_folder_items = os.listdir(
+                    EXPANSION_FUNCTION_MODULE_FOLDER_PATH
+                )
+                expansion_function_module_names = []
+                for item in expansion_function_modules_folder_items:
+                    if os.path.isfile(item):
+                        continue
+                    else:
+                        expansion_function_module_names.append(item)
+                print(
+                    STYLE_LOWLIGHT
+                    + "找到"
+                    + str(len(expansion_function_module_names))
+                    + "个拓展功能模块"
+                    + STYLE_DEFULT
+                )
+                usable_expansion_function_modules_info = {}
+                next_usable_expansion_function_module_id = 1
+                for efm_n in expansion_function_module_names:
+                    efm_usable = True
+                    efm_unusable_message = ""
+                    if not (
+                        os.path.exists(
+                            EXPANSION_FUNCTION_MODULE_FOLDER_PATH
+                            + "/"
+                            + efm_n
+                            + "/introduction_info.txt"
+                        )
+                        and os.path.exists(
+                            EXPANSION_FUNCTION_MODULE_FOLDER_PATH
+                            + "/"
+                            + efm_n
+                            + "/efm_interactive_interface.py"
+                        )
+                    ):
+                        efm_usable = False
+                        efm_unusable_message = (
+                            "拓展功能模块 " + efm_n + " 存在问题，无法调用。"
+                        )
+                    if efm_usable:
+                        try:
+                            with open(
+                                EXPANSION_FUNCTION_MODULE_FOLDER_PATH
+                                + "/"
+                                + efm_n
+                                + "/introduction_info.txt",
+                                "r",
+                                encoding="utf-8",
+                            ) as f:
+                                f.readline()
+                                f.readline()
+                                f.readline()
+                                efm_verision = f.readline()[:-1].split("：")[1]
+                                f.readline()
+                                f.readline()
+                                applicable_versions = f.readline()[:-1].split(
+                                    INLINE_INFO_SEPARATOR
+                                )
+                                if VERSION_STR not in applicable_versions:
+                                    efm_usable = False
+                                    efm_unusable_message = (
+                                        "拓展功能模块 "
+                                        + efm_n
+                                        + " 不适用于当前Pic_Collector的版本，无法调用。"
+                                    )
+                                f.readline()
+                                simple_introduction_info = f.readline()
+                        except Exception:
+                            efm_usable = False
+                            efm_unusable_message = (
+                                "拓展功能模块 " + efm_n + " 存在问题，无法调用。"
+                            )
+                    if efm_usable:
+                        usable_expansion_function_modules_info[
+                            next_usable_expansion_function_module_id
+                        ] = [efm_n, simple_introduction_info]
+                        next_usable_expansion_function_module_id += 1
+                    else:
+                        print(COLOR_YELLOW + efm_unusable_message + STYLE_DEFULT)
+                print(
+                    STYLE_LOWLIGHT
+                    + "通过简单检查发现找到的"
+                    + str(len(expansion_function_module_names))
+                    + "个拓展功能模块中有"
+                    + str(len(usable_expansion_function_modules_info))
+                    + "个拓展功能模块是可用的"
+                    + STYLE_DEFULT
+                )
+                if len(usable_expansion_function_modules_info) > 0:
+                    print(
+                        "找到"
+                        + str(len(usable_expansion_function_modules_info))
+                        + "个可用的拓展功能模块。"
+                    )
+                    print(
+                        "注意：目前仅对找到的拓展功能模块进行了简单的检查，不能确保这些目前被认为可用的拓展模块完整且可以正常工作。"
+                    )
+                    for efm_id in usable_expansion_function_modules_info.keys():
+                        print(
+                            str(efm_id)
+                            + ".\t"
+                            + usable_expansion_function_modules_info[efm_id][0]
+                        )
+                        print("\tv" + efm_verision)
+                        print("\t" + usable_expansion_function_modules_info[efm_id][1])
+                else:
+                    print("没有找到任何可用的拓展功能模块。")
+                    print(
+                        "您需要将您拥有的与当前版本的Pic_Collector兼容的拓展功能模块文件夹存入存储扩展功能模块的文件夹（"
+                        + EXPANSION_FUNCTION_MODULE_FOLDER_PATH
+                        + "）以在Pic_Collector中使用对应扩展功能模块提供的拓展功能。"
+                    )
+                print("---")
+                while True:
+                    if len(usable_expansion_function_modules_info) > 0:
+                        print(
+                            "请输入上面显示的可用拓展模块对应的编号以开始与对应拓展模块交互，或者输入以下选项以执行对应的操作。"
+                        )
+                    print("A.再次检测存储扩展功能模块的文件夹以寻找扩展功能模块")
+                    print("B.删除所有拓展功能模块并关闭拓展功能")
+                    print("C.返回主菜单")
+                    user_input = input("请输入：")
+                    print()
+
+                    if user_input == "":
+                        print("您没有输入任何内容，请您重新输入。")
+
+                    elif user_input[0] == "A" or user_input[0] == "a":
+                        current_ii = InteractiveInterface.expansion_function
+                        interface_switching = False
+                        break
+
+                    elif user_input[0] == "B" or user_input[0] == "b":
+                        return_main_menu = False
+                        while True:
+                            print("您确定要删除所有拓展功能模块吗？删除后无法找回。")
+                            print("Y.是")
+                            print("N.否")
+                            user_input = input("请输入：")
+                            print()
+                            if user_input == "":
+                                print("您没有输入任何内容，请您重新输入。")
+                            elif user_input[0] == "Y" or user_input[0] == "y":
+                                shutil.rmtree(EXPANSION_FUNCTION_MODULE_FOLDER_PATH)
+                                print(
+                                    STYLE_LOWLIGHT
+                                    + "已删除所有拓展功能模块并关闭拓展功能"
+                                    + STYLE_DEFULT
+                                )
+                                return_main_menu = True
+                                break
+                            elif user_input[0] == "N" or user_input[0] == "n":
+                                break
+                            else:
+                                print("本程序未能理解您的输入，请您重新输入。")
+                        if return_main_menu:
+                            current_ii = InteractiveInterface.main_menu
+                            break
+
+                    elif user_input[0] == "C" or user_input[0] == "c":
+                        current_ii = InteractiveInterface.main_menu
+                        break
+
+                    elif user_input.isdigit():
+                        user_selected_efm_id = int(user_input)
+                        if (
+                            user_selected_efm_id
+                            in usable_expansion_function_modules_info.keys()
+                        ):
+                            efm_name = usable_expansion_function_modules_info[
+                                user_selected_efm_id
+                            ][0]
+                            efm_import = False
+                            try:
+                                exec(
+                                    "import "
+                                    + EXPANSION_FUNCTION_MODULE_FOLDER_PATH
+                                    + "."
+                                    + usable_expansion_function_modules_info[
+                                        user_selected_efm_id
+                                    ][0]
+                                    + ".efm_interactive_interface as efm"
+                                )
+                                efm_import = True
+                                print(
+                                    STYLE_LOWLIGHT
+                                    + "已成功加载拓展功能模块 "
+                                    + efm_name
+                                    + STYLE_DEFULT
+                                )
+                                print(
+                                    "开始与拓展模块 "
+                                    + usable_expansion_function_modules_info[
+                                        user_selected_efm_id
+                                    ][0]
+                                    + " 交互"
+                                )
+                                print("\n*-*-*-*-*")
+                                efm.interactive_interface(warehouse_keeper)
+                                print("*-*-*-*-*\n")
+                                print(
+                                    "结束与拓展模块 "
+                                    + usable_expansion_function_modules_info[
+                                        user_selected_efm_id
+                                    ][0]
+                                    + " 交互"
+                                )
+                            except Exception as e:
+                                print("*-*-*-*-*\n")
+                                print(
+                                    "结束与拓展模块 "
+                                    + usable_expansion_function_modules_info[
+                                        user_selected_efm_id
+                                    ][0]
+                                    + " 交互"
+                                )
+                                if efm_import:
+                                    print(
+                                        COLOR_YELLOW
+                                        + "拓展功能模块 "
+                                        + efm_name
+                                        + " 运行时出现异常"
+                                        + STYLE_DEFULT
+                                    )
+                                else:
+                                    print(
+                                        COLOR_YELLOW
+                                        + "未能成功加载拓展功能模块 "
+                                        + efm_name
+                                        + STYLE_DEFULT
+                                    )
+                                print(COLOR_YELLOW + "异常详细信息：" + STYLE_DEFULT)
+                                print(COLOR_YELLOW + str(e) + STYLE_DEFULT)
+                                print()
+                            if efm_import:
+                                del efm
+                                efm_import = False
+                            current_ii = InteractiveInterface.main_menu
+                            break
+                        else:
+                            print("没有您输入的编号所对应的拓展功能模块。")
+
+                    else:
+                        print("本程序未能理解您的输入，请您重新输入。")
 
         elif current_ii == InteractiveInterface.settings:
             print("---设置---")

@@ -78,9 +78,12 @@ class PicWarehouseKeeper(object):
                         self._user_defined_ordinary_fields[i]
                     ] = value
                 tags_str = f.readline()[:-1].split("：")[1]
-                self._pic_info_dict[pic_id]["标签"] = tags_str.split(
-                    INLINE_INFO_SEPARATOR
-                )
+                if tags_str == "":
+                    self._pic_info_dict[pic_id]["标签"] = []
+                else:
+                    self._pic_info_dict[pic_id]["标签"] = tags_str.split(
+                        INLINE_INFO_SEPARATOR
+                    )
                 for i in range(self._num_user_defined_comment_field):
                     num_comment_line = int(f.readline()[:-1].split("：")[1])
                     comment = ""
@@ -174,9 +177,11 @@ class PicWarehouseKeeper(object):
                 for field in self._user_defined_ordinary_fields:
                     f.write(field + "：" + self._pic_info_dict[pic_id][field] + "\n")
                 tags_info_line_str = "标签："
-                for tag in self._pic_info_dict[pic_id]["标签"]:
-                    tags_info_line_str += tag + INLINE_INFO_SEPARATOR
-                f.write(tags_info_line_str[:-1] + "\n")
+                if len(self._pic_info_dict[pic_id]["标签"]) != 0:
+                    for tag in self._pic_info_dict[pic_id]["标签"]:
+                        tags_info_line_str += tag + INLINE_INFO_SEPARATOR
+                    tags_info_line_str = tags_info_line_str[:-1]
+                f.write(tags_info_line_str + "\n")
                 for field in self._user_defined_comment_fields:
                     if self._pic_info_dict[pic_id][field] == "":
                         f.write(field + "：0\n")
@@ -385,9 +390,11 @@ class PicWarehouseKeeper(object):
                 for field in self._user_defined_ordinary_fields:
                     f.write(field + "：" + self._pic_info_dict[pic_id][field] + "\n")
                 tags_info_line_str = "标签："
-                for tag in self._pic_info_dict[pic_id]["标签"]:
-                    tags_info_line_str += tag + INLINE_INFO_SEPARATOR
-                f.write(tags_info_line_str[:-1] + "\n")
+                if len(self._pic_info_dict[pic_id]["标签"]) > 0:
+                    for tag in self._pic_info_dict[pic_id]["标签"]:
+                        tags_info_line_str += tag + INLINE_INFO_SEPARATOR
+                    tags_info_line_str = tags_info_line_str[:-1]
+                f.write(tags_info_line_str + "\n")
                 for field in self._user_defined_comment_fields:
                     if self._pic_info_dict[pic_id][field] == "":
                         f.write(field + "：0\n")
@@ -532,8 +539,8 @@ class PicWarehouseKeeper(object):
         import_pic_count = 0
         for i in range(len(pic_paths)):
             new_pic_id = self._get_new_pic_id()
-            _, new_pic_name_extension = path.splitext(pic_paths[i])
-            imported_pic_filename = str(new_pic_id) + new_pic_name_extension
+            _, new_pic_file_name_extension = path.splitext(pic_paths[i])
+            imported_pic_filename = str(new_pic_id) + new_pic_file_name_extension
             self._pic_info_dict[new_pic_id] = pic_info_list[i]
             self._pic_info_dict[new_pic_id]["文件名"] = imported_pic_filename
             copy(pic_paths[i], PIC_FOLDER_PATH + "/" + imported_pic_filename)
@@ -550,7 +557,7 @@ class PicWarehouseKeeper(object):
         self._update_pic_info_file()
         self._pwk_print("导入完成（共导入" + str(import_pic_count) + "张图片）")
 
-    def modify_pic_info(self, pic_id, new_info_dict):
+    def modify_pic_info(self, pic_id, new_info_dict, print_message = True):
         """
         修改指定图片信息
         参数pic_id：指定的图片的编号；
@@ -559,7 +566,8 @@ class PicWarehouseKeeper(object):
         """
         self._pic_info_dict[pic_id] = new_info_dict
         self._update_pic_info_file()
-        self._pwk_print("成功修改编号为" + str(pic_id) + "的图片的信息")
+        if print_message:
+            self._pwk_print("成功修改编号为" + str(pic_id) + "的图片的信息")
 
     def modify_pic_warehouse_name(self, new_pic_warehouse_name):
         """
